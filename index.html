@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Driver Drowsiness Detection • AI Safety Console</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="app-header">
+        <div>
+          <p class="overline">IoT • Vision Safety Platform</p>
+          <h1>Driver Drowsiness Detection</h1>
+          <p class="subtitle">
+            Real-time face &amp; eye analysis with smart alerts, AI configuration, and futuristic
+            telemetry.
+          </p>
+        </div>
+        <div class="header-status">
+          <div class="status-chip" id="camera-status">CAMERA: <span>Idle</span></div>
+          <div class="status-chip" id="tracking-status">TRACKING: <span>Offline</span></div>
+          <div class="status-chip" id="alarm-status">ALARM: <span>Standby</span></div>
+        </div>
+      </header>
+
+      <main class="app-main">
+        <section class="panel video-panel">
+          <div class="video-wrapper">
+            <video id="input-video" autoplay playsinline muted></video>
+            <canvas id="output-canvas"></canvas>
+            <div class="hud">
+              <div class="hud-row">
+                <span class="hud-item">FPS <strong id="fps-value">0</strong></span>
+                <span class="hud-item">Face <strong id="face-value">--</strong></span>
+                <span class="hud-item">Light <strong id="light-value">--</strong></span>
+              </div>
+              <div class="hud-row">
+                <span class="hud-item">Head <strong id="head-value">--</strong></span>
+                <span class="hud-item">Yawn <strong id="yawn-value">--</strong></span>
+                <span class="hud-item">Blink <strong id="blink-value">0</strong></span>
+              </div>
+            </div>
+            <div class="alert-banner" id="alert-banner">DROWSINESS DETECTED • TAKE A BREAK</div>
+          </div>
+
+          <div class="control-row">
+            <button class="btn primary" id="start-btn">Start Camera</button>
+            <button class="btn" id="stop-btn">Stop</button>
+            <button class="btn" id="calibrate-btn">Calibrate Eyes</button>
+            <button class="btn" id="test-alarm-btn">Test Alarm</button>
+            <label class="btn ghost file-btn">
+              Upload Alarm
+              <input id="alarm-file" type="file" accept="audio/*" />
+            </label>
+          </div>
+
+          <div class="alarm-info">
+            Default alarm: <span id="alarm-source">Loading…</span>
+          </div>
+
+          <div class="hint">
+            Camera access requires HTTPS or <code>localhost</code>. Use Chrome/Edge for best
+            results.
+          </div>
+        </section>
+
+        <section class="panel side-panel">
+          <div class="card">
+            <div class="card-header">
+              <h3>Live Metrics</h3>
+              <span class="pill" id="sleepiness-badge">Normal</span>
+            </div>
+            <div class="metrics-grid">
+              <div class="metric">
+                <p>Eye EAR</p>
+                <h4 id="ear-value">0.000</h4>
+              </div>
+              <div class="metric">
+                <p>PERCLOS</p>
+                <h4 id="perclos-value">0%</h4>
+              </div>
+              <div class="metric">
+                <p>Closed Time</p>
+                <h4 id="closed-value">0.0s</h4>
+              </div>
+              <div class="metric">
+                <p>Yaw Ratio</p>
+                <h4 id="yaw-value">0.00</h4>
+              </div>
+            </div>
+            <div class="gauge">
+              <svg viewBox="0 0 120 120">
+                <circle class="gauge-track" cx="60" cy="60" r="46"></circle>
+                <circle class="gauge-progress" id="sleepiness-gauge" cx="60" cy="60" r="46"></circle>
+              </svg>
+              <div class="gauge-center">
+                <div class="score" id="sleepiness-score">0</div>
+                <div class="label">Sleepiness</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>AI Configuration</h3>
+              <div class="chip-group">
+                <label class="toggle">
+                  <input type="checkbox" id="toggle-overlay" />
+                  <span>Overlay</span>
+                </label>
+                <label class="toggle">
+                  <input type="checkbox" id="toggle-perclos" checked />
+                  <span>PERCLOS</span>
+                </label>
+                <label class="toggle">
+                  <input type="checkbox" id="toggle-yawn" checked />
+                  <span>Yawn</span>
+                </label>
+                <label class="toggle">
+                  <input type="checkbox" id="toggle-head" checked />
+                  <span>Head Pose</span>
+                </label>
+              </div>
+            </div>
+            <div class="config-grid">
+              <label class="config-row">
+                <span>Eye EAR Threshold</span>
+                <input id="ear-threshold" type="range" min="0.12" max="0.35" step="0.005" />
+                <strong id="ear-threshold-value">0.22</strong>
+              </label>
+              <label class="config-row">
+                <span>Drowsy Duration (s)</span>
+                <input id="drowsy-duration" type="range" min="1" max="6" step="0.5" />
+                <strong id="drowsy-duration-value">3.0</strong>
+              </label>
+              <label class="config-row">
+                <span>Blink Max (ms)</span>
+                <input id="blink-max" type="range" min="200" max="900" step="50" />
+                <strong id="blink-max-value">500</strong>
+              </label>
+              <label class="config-row">
+                <span>PERCLOS Window (s)</span>
+                <input id="perclos-window" type="range" min="20" max="120" step="5" />
+                <strong id="perclos-window-value">60</strong>
+              </label>
+              <label class="config-row">
+                <span>PERCLOS Threshold</span>
+                <input id="perclos-threshold" type="range" min="0.2" max="0.7" step="0.02" />
+                <strong id="perclos-threshold-value">0.40</strong>
+              </label>
+              <label class="config-row">
+                <span>Yawn Threshold</span>
+                <input id="yawn-threshold" type="range" min="0.2" max="0.8" step="0.02" />
+                <strong id="yawn-threshold-value">0.35</strong>
+              </label>
+              <label class="config-row">
+                <span>Head Turn Ratio</span>
+                <input id="head-threshold" type="range" min="0.18" max="0.6" step="0.02" />
+                <strong id="head-threshold-value">0.35</strong>
+              </label>
+              <label class="config-row">
+                <span>Alarm Volume</span>
+                <input id="alarm-volume" type="range" min="0" max="1" step="0.05" />
+                <strong id="alarm-volume-value">0.5</strong>
+              </label>
+            </div>
+
+            <div class="config-actions">
+              <button class="btn ghost" id="copy-config">Copy Config JSON</button>
+              <button class="btn" id="apply-config">Apply JSON</button>
+            </div>
+            <textarea id="config-json" spellcheck="false"></textarea>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>Event Log</h3>
+              <button class="btn ghost" id="export-logs">Export Logs</button>
+            </div>
+            <ul class="log-list" id="log-list"></ul>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
