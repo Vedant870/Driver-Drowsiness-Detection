@@ -34,6 +34,51 @@ body {
   padding: 32px 24px 48px;
 }
 
+.app-footer {
+  margin-top: 32px;
+}
+
+.footer-card {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 20px 24px;
+  background: rgba(8, 14, 29, 0.8);
+  display: grid;
+  gap: 12px;
+}
+
+.footer-title {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.footer-name {
+  margin: 0;
+  font-family: "Orbitron", sans-serif;
+  font-size: 22px;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-links a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.footer-links a:hover {
+  border-color: var(--accent);
+}
+
 .app-header {
   display: flex;
   justify-content: space-between;
