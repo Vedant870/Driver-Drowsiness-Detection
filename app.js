@@ -60,13 +60,13 @@ const logList = document.getElementById("log-list");
 
 const DEFAULT_CONFIG = {
   earThreshold: 0.22,
-  drowsyDuration: 3.0,
+  drowsyDuration: 1.0,
   blinkMax: 500,
   perclosWindow: 60,
   perclosThreshold: 0.4,
-  yawnThreshold: 0.35,
-  headTurnThreshold: 0.35,
-  alarmVolume: 0.5,
+  yawnThreshold: 0.2,
+  headTurnThreshold: 0.2,
+  alarmVolume: 1,
   overlay: false,
   perclosEnabled: true,
   yawnEnabled: true,
